@@ -363,7 +363,7 @@ def frames_to_video(video_graph: VideoGraph):
             file_obj=open(os.path.join(svg_folder, fname), "r"),
             write_to=os.path.join(png_folder, fname.split('.')[0] + '.png')
         )
-    os.system("ffmpeg -i ./output/%s_png/frame%%03d.png %s.mp4" % (video, video))
+    os.system("ffmpeg -i ./output/%s_png/frame%%03d.png ./output/%s.mp4" % (video, video))
 
 
 def main(args):
