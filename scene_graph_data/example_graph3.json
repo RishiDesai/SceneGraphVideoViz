@@ -1,1 +1,0 @@
-{"url": "https://temp.jpg", "objects": [{"name": "person"}, {"name": "shirt"}, {"name": "chair"}], "attributes": [], "relationships": [{"predicate": "saving", "subject": 0, "object": 1}, {"predicate": "sitting", "subject": 0, "object": 2}]}
