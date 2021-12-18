@@ -3,7 +3,7 @@ import os
 import pickle
 import cairosvg
 import numpy as np
-import scipy
+from scipy.signal import medfilt
 from xml.dom import minidom
 import pygraphviz
 
@@ -107,7 +107,7 @@ class VideoGraph:
         Run a median filter to smooth things out
         """
         for elem, signal in self.raw_signal.items():
-            filtered_signal = scipy.signal.medfilt(signal, kernel_size=kernel_size)
+            filtered_signal = medfilt(signal, kernel_size=kernel_size)
             self.new_signal[elem] = filtered_signal
 
     def _enforce_signal(self):
@@ -251,7 +251,8 @@ def load_data_from_predictions(args):
             obj_nodes.add(trip[2])
             rel_nodes.add(trip[1])
 
-        curr_sg = SceneGraph(obj_nodes=obj_nodes, rel_nodes=rel_nodes, attr_nodes=[], rel_edges=rel_edges, attr_edges=[])
+        curr_sg = SceneGraph(obj_nodes=obj_nodes, rel_nodes=rel_nodes, attr_nodes=[], rel_edges=rel_edges,
+                             attr_edges=[])
         scene_graph_list.append(curr_sg)
 
     if args.video[-1] == '/':
@@ -261,24 +262,6 @@ def load_data_from_predictions(args):
 
     video_graph = VideoGraph(scene_graph_list, step=args.step, title=video_title)
     return video_graph
-
-
-def frames_to_video(video_graph: VideoGraph):
-    """
-    Make a video from the svg images
-    """
-    video = video_graph.title
-    folder = './%s_svg' % video
-    fnames = sorted(os.listdir(folder))
-    out_folder = './%s_png' % video
-    if not os.path.exists(out_folder):
-        os.makedirs(out_folder)
-    for fname in fnames:
-        cairosvg.svg2png(
-            file_obj=open(os.path.join(folder, fname), "r"),
-            write_to=os.path.join(out_folder, fname.split('.')[0] + '.png')
-        )
-    os.system("ffmpeg -i %s_png/frame%%03d.png %s.mp4" % (video, video))
 
 
 def create_union_graph(video_graph: VideoGraph):
@@ -316,13 +299,11 @@ def create_union_graph(video_graph: VideoGraph):
     union_graph_gviz.layout(prog='sfdp')
 
     # We write out the union to SVG, so we can parse it for the per-Frame SVGs
-
+    if not os.path.exists('./output/'):
+        os.makedirs('./output/')
     # union_graph_gviz.write(filename + '.dot')
-    union_graph_gviz.draw(filename + '.svg', format='svg')
-
-    # create_frame_graphs(filename + '.svg', video_graph)
-
-    return filename + '.svg'
+    union_graph_gviz.draw('./output/' + filename + '.svg', format='svg')
+    return './output/' + filename + '.svg'
 
 
 def create_frame_graphs(union_graph_filename, video_graph: VideoGraph):
@@ -357,7 +338,7 @@ def create_frame_graphs(union_graph_filename, video_graph: VideoGraph):
             parent = dead.parentNode
             parent.removeChild(dead)
 
-        viddir = video_graph.title + '_svg'
+        viddir = './output/' + video_graph.title + '_svg'
         if not os.path.isdir(viddir):
             os.mkdir(viddir)
 
@@ -367,32 +348,44 @@ def create_frame_graphs(union_graph_filename, video_graph: VideoGraph):
             fs.close()
 
 
+def frames_to_video(video_graph: VideoGraph):
+    """
+    Make a video from the svg frame images
+    """
+    video = video_graph.title
+    svg_folder = './output/%s_svg' % video
+    png_folder = './output/%s_png' % video
+    fnames = sorted(os.listdir(svg_folder))
+    if not os.path.exists(png_folder):
+        os.makedirs(png_folder)
+    for fname in fnames:
+        cairosvg.svg2png(
+            file_obj=open(os.path.join(svg_folder, fname), "r"),
+            write_to=os.path.join(png_folder, fname.split('.')[0] + '.png')
+        )
+    os.system("ffmpeg -i ./output/%s_png/frame%%03d.png %s.mp4" % (video, video))
+
+
 def main(args):
+    # Load data and create VideoGraph object
     video_graph: VideoGraph = load_data_from_predictions(args)
 
+    # Predictions are noisy, so filtering makes prediction video smoother
     video_graph.median_filter(kernel_size=25)
 
-    # plt.figure()
-    # plt.plot(video_graph.raw_signal['box'])
-    # plt.plot(video_graph.new_signal['box'])
-    # plt.show()
-    #
-    # plt.figure()
-    # plt.plot(video_graph.raw_signal['person#not contacting#box'])
-    # plt.plot(video_graph.new_signal['person#not contacting#box'])
-    # plt.show()
+    # We need to create a "union graph" of all the frame-level scene graphs
+    union_graph_filename = create_union_graph(video_graph)
 
-    union_graph_file = create_union_graph(video_graph)
+    # Create the frame-level SVGs from the union graph SVG
+    create_frame_graphs(union_graph_filename, video_graph)
 
-    create_frame_graphs(union_graph_filename=union_graph_file, video_graph=video_graph)
-
+    # Stitch the frame-level SVGs into a video
     frames_to_video(video_graph)
 
 
 if __name__ == '__main__':
 
-    # example_videos = ['5INX3', '3VH9O', '00T1E']
-    example_videos = ['5INX3']
+    example_videos = ['5INX3', '3VH9O', '00T1E']
 
     for example_vid in example_videos:
         parser = argparse.ArgumentParser()
