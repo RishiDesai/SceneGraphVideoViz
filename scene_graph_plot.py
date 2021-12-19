@@ -403,11 +403,12 @@ def display_scene_graphs(video_graph: VideoGraph, args):
     union_graph_gviz.graph_attr['K'] = 3.0
 
     # Use pygraphviz for generating the node (and edge) layouts, then draw with NetworkX
-    # Write out the pygraphviz vis to a file for fun
     union_graph_gviz.layout(prog='sfdp')
-    union_graph_gviz.draw('total_graph.png')
-    union_graph_gviz.write('total_graph.dot')
-    union_graph_gviz.draw('total_graph.svg', format='svg')
+
+    ### Uncomment below to write out the pygraphviz vis to a file for fun
+    # union_graph_gviz.draw('union_graph.png')
+    # union_graph_gviz.write('union_graph.dot')
+    # union_graph_gviz.draw('union_graph.svg', format='svg')
 
     node_positions, edge_positions = set_node_edge_positions(union_graph_nx, union_graph_gviz)
 
@@ -424,8 +425,6 @@ def display_scene_graphs(video_graph: VideoGraph, args):
 
     plt.xlim(Xlim)
     plt.ylim(Ylim)
-    # plt.xscale('linear')
-    # plt.yscale('linear')
     plt.axis('scaled')
 
     plt.draw()
@@ -468,8 +467,6 @@ def display_scene_graphs(video_graph: VideoGraph, args):
         custom_draw_networkx_edges(G=current_graph, pos=node_positions, ax=plt.gca(),
                                    edge_positions=edge_positions, node_size=100)
 
-        # plt.xscale('linear')
-        # plt.yscale('linear')
         plt.axis('scaled')
 
         plt.xlim(Xlim)
@@ -477,7 +474,6 @@ def display_scene_graphs(video_graph: VideoGraph, args):
 
         plt.draw()
         plt.show()
-        # plt.savefig('exported_sg/' + ())
 
 
 def main(args):
@@ -487,12 +483,13 @@ def main(args):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
+    example_videos = ['5INX3', '3VH9O', '00T1E']
 
-    parser.add_argument("--video", type=str,
-                        default="scene_graph_data/3VH9O/")
-    parser.add_argument("--step", type=int,
-                        default=1)
+    example_vid = example_videos[0]
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--video", type=str, default="scene_graph_data/" + example_vid + '/')
+    parser.add_argument("--step", type=int, default=10)
 
     args = parser.parse_args()
     main(args)
