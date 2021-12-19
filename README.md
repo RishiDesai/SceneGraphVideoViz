@@ -10,9 +10,9 @@ This project uses `Python 3.7`, [PyGraphviz](https://pygraphviz.github.io/) 1.3,
 ### Example Videos
 This repository comes with three video clip examples from [Action Genome](https://github.com/JingweiJ/ActionGenome):
 
-<img src="/gifs/00T1E_vid.gif" width="30%" height="30%"/> <img src="/gifs/00T1E.gif"/>
-<img src="/gifs/3VH9O_vid.gif" width="30%" height="30%"/> <img src="/gifs/3VH9O.gif"/>
-<img src="/gifs/5INX3_vid.gif" width="30%" height="30%"/> <img src="/gifs/5INX3.gif"/>
+<img src="/gifs/00T1E_vid.gif" width="240" height="480"/> <img src="/gifs/00T1E.gif" width="480" height="480"/>
+<img src="/gifs/3VH9O_vid.gif" width="240" height="480"/> <img src="/gifs/3VH9O.gif" width="480" height="480"/>
+<img src="/gifs/5INX3_vid.gif" width="240" height="480"/> <img src="/gifs/5INX3.gif" width="480" height="480"/>
 
 <!-- ![Output sample](https://github.com/RishiDesai/SceneGraphVideoViz/blob/main/gifs/3VH9O_vid.gif) -->
 <!-- <img src="/gifs/3VH9O_vid.gif" width="30%" height="30%"/> -->
