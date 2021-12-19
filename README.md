@@ -8,8 +8,16 @@ This project uses `Python 3.7`, [PyGraphviz](https://pygraphviz.github.io/) 1.3,
 
 
 ### Example Videos
-This repo comes with three video examples:
+This repository comes with three video clip examples from [Action Genome](https://github.com/JingweiJ/ActionGenome):
 
-![Output sample](https://github.com/RishiDesai/SceneGraphVideoViz/blob/main/gifs/00T1E.gif)
-![Output sample](https://github.com/RishiDesai/SceneGraphVideoViz/blob/main/gifs/3VH9O.gif)
-![Output sample](https://github.com/RishiDesai/SceneGraphVideoViz/blob/main/gifs/5INX3.gif)
+<img src="/gifs/00T1E_vid.gif" width="30%" height="30%"/> <img src="/gifs/00T1E.gif"/>
+<img src="/gifs/3VH9O_vid.gif" width="30%" height="30%"/> <img src="/gifs/3VH9O.gif"/>
+<img src="/gifs/5INX3_vid.gif" width="30%" height="30%"/> <img src="/gifs/5INX3.gif"/>
+
+<!-- ![Output sample](https://github.com/RishiDesai/SceneGraphVideoViz/blob/main/gifs/3VH9O_vid.gif) -->
+<!-- <img src="/gifs/3VH9O_vid.gif" width="30%" height="30%"/> -->
+<!-- ![Output sample](https://github.com/RishiDesai/SceneGraphVideoViz/blob/main/gifs/3VH9O.gif) -->
+
+<!-- ![Output sample](https://github.com/RishiDesai/SceneGraphVideoViz/blob/main/gifs/5INX3_vid.gif) -->
+<!-- <img src="/gifs/5INX3_vid.gif" width="30%" height="30%"/> -->
+<!-- ![Output sample](https://github.com/RishiDesai/SceneGraphVideoViz/blob/main/gifs/5INX3.gif) -->
